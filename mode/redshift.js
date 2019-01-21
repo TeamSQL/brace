@@ -133,17 +133,23 @@ var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 var JsonHighlightRules = acequire("./json_highlight_rules").JsonHighlightRules;
 
 var RedshiftHighlightRules = function() {
+
+    var logicalOperators = "ALL|AND|ANY|BETWEEN|IN|LIKE|NOT|OR|SOME";
+    logicalOperators += "|NULL|IS|INNER|OUTER|LEFT|RIGHT|JOIN|CROSS"; //SSMS colors these gray too
+
     var keywords = (
         "aes128|aes256|all|allowoverwrite|analyse|analyze|and|any|array|as|asc|authorization|backup|" + 
-        "between|binary|blanksasnull|both|bytedict|bzip2|case|cast|check|collate|column|constraint|create|credentials|" + 
+        "between|binary|blanksasnull|both|bytedict|bzip2|cast|check|collate|column|constraint|create|credentials|" + 
         "cross|current_date|current_time|current_timestamp|current_user|current_user_id|default|deferrable|deflate|defrag|delta|" + 
         "delta32k|desc|disable|distinct|do|else|emptyasnull|enable|encode|encrypt|encryption|end|except|explicit|false|for|foreign|" + 
         "freeze|from|full|globaldict256|globaldict64k|grant|group|gzip|having|identity|ignore|ilike|in|initially|inner|intersect|into|is|" + 
         "isnull|join|leading|left|like|limit|localtime|localtimestamp|lun|luns|lzo|lzop|minus|mostly13|mostly32|mostly8|natural|new|not|notnull|" + 
         "null|nulls|off|offline|offset|old|on|only|open|or|order|outer|overlaps|parallel|partition|percent|permissions|placing|primary|raw|readratio|" +
         "recover|references|rejectlog|resort|restore|right|select|session_user|similar|some|sysdate|system|table|tag|tdes|text255|text32k|then|timestamp|" + 
-        "to|top|trailing|true|truncatecolumns|union|unique|user|using|verbose|wallet|when|where|with|without"
+        "to|top|trailing|true|truncatecolumns|union|unique|user|using|verbose|wallet|when|where|with|without|predicate|columns|comprows|compression|copy|format|csv|delimiter|fixedwidth|avro|json|encrypted|bzip2|gzip|lzop|parquet|orc|acceptanydate|acceptinvchars|blanksasnull|dateformat|emptyasnull|encoding|escape|explicit_ids|fillrecord|ignoreblanklines|ignoreheader|null as|removequotes|roundec|timeformat|trimblanks|truncatecolumns|comprows|compupdate|maxerror|noload|statupdate|manifest|region|iam_role|master_symmetric_key|ssh|acceptanydate|acceptinvchars|access_key_id|secret_access_key|avro|blanksasnull|bzip2|comprows|compupdate|credentials|csv|dateformat|delimiter|emptyasnull|encoding|encrypted|escape|explicit_ids|fillrecord|fixedwidth|format|iam_role|from|gzip|ignoreblanklines|ignoreheader|json|lzop|manifest|master_symmetric_key|maxerror|noload|null as|readratio|region|removequotes|roundec|ssh|statupdate|timeformat|session_token|trimblanks|truncatecolumns|external|data catalog|hive metastore|catalog_role|vacuum|copy|unload"
     );
+
+    var dataTypes = ("SMALLINT|INT2|INTEGER|INT|INT4|BIGINT|INT8|DECIMAL|NUMERIC|REAL|FLOAT4|DOUBLE PRECISION|DOUBLE|PRECISION|FLOAT8|FLOAT|BOOLEAN|BOOL|CHAR|CHARACTER|NCHAR|BPCHAR|VARCHAR|CHARACTER VARYING|VARYING|NVARCHAR|TEXT|DATE|TIMESTAMP|TIMESTAMP WITHOUT TIMEZONE|TIMESTAMPTZ|TIMESTAMP WITH TIME ZONE");
 
 
     var builtinFunctions = (
@@ -162,7 +168,9 @@ var RedshiftHighlightRules = function() {
     );
 
     var keywordMapper = this.createKeywordMapper({
+        "constant.language": logicalOperators,
         "support.function": builtinFunctions,
+        "storage.type": dataTypes,
         "keyword": keywords
     }, "identifier", true);
 
